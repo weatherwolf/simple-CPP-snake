@@ -8,6 +8,7 @@ int main() {
 
 	float tick_interval = 0.2f;
 	float elapsed = 0.0f;
+	bool game_over = false;
 
 	std::vector<int> direction{1, 0};
 	std::vector<int> new_direction{1, 0};
@@ -23,31 +24,36 @@ int main() {
 		if (IsKeyDown(KEY_D)) new_direction = {1, 0};
 		if (IsKeyDown(KEY_A)) new_direction = {-1, 0};
 
-		// Update only on tick
-		if (elapsed >= tick_interval) {
+		// Restart check every frame
+		if (game_over) {
+			if (IsKeyPressed(KEY_R)) {
+				game.reset();
+				direction = {1, 0};
+				new_direction = {1, 0};
+				game_over = false;
+			}
+		} else if (elapsed >= tick_interval) {
 			elapsed -= tick_interval;
 
 			if (!compare_vectors(new_direction, direction)) {
 				direction = new_direction;
 			}
 
-			bool legal_move = game->update_game_state(direction);
+			bool legal_move = game.update_game_state(direction);
 			if (!legal_move) {
-				if (IsKeyDown(KEY_R)) game->reset();
-				else break;
-			};
-			game->update_snake();
-			game->eat_food();
+				game_over = true;
+			} else {
+				game.update_snake();
+				game.eat_food();
+			}
 		}
-
 
 		// Draw every frame
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
-		game->draw();
+		game.draw();
 		EndDrawing();
 	}
-
 
 	CloseWindow();
 	return 0;

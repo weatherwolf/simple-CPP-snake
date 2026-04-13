@@ -7,14 +7,14 @@
 
 class Game {
 	public:
-	Game();
-	void draw();
-	bool update_game_state(int dx, int dy);
-	bool update_game_state(std::vector<int> direction);
-	void create_random_food();
-	void eat_food();
-	void update_snake();
-	void reset();
+		Game();
+		void draw();
+		bool update_game_state(int dx, int dy);
+		bool update_game_state(std::vector<int> direction);
+		void create_random_food();
+		void eat_food();
+		void update_snake();
+		void reset();
 
 	private:
 		Snake snake;
